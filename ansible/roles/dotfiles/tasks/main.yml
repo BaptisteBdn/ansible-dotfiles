@@ -1,0 +1,28 @@
+---
+
+- name: Clone repository locally
+  git:
+    repo: "{{ dotfiles_repo }}"
+    dest: "{{ dotfiles_repo_local_destination }}"
+  become: false
+
+- name: Check if all the dotfiles are links
+  command: "ls -F {{ home_path }}/{{ item }}"
+  register: existing_dotfile_info
+  failed_when: false
+  check_mode: false
+  changed_when: false
+  with_items: "{{ dotfiles }}"
+
+- name: Move to backup for dotfiles file that are not links
+  command: mv {{ home_path }}/{{ dotfiles[item.0] }} {{ home_path }}/{{ dotfiles[item.0] }}.bak
+  when: "'@' not in item.1.stdout and item.1.stdout != ''"
+  with_indexed_items: "{{ existing_dotfile_info.results }}"
+
+- name: Link dotfiles into home folder
+  file:
+    src: "{{ dotfiles_repo_local_destination }}/{{ item }}"
+    dest: "{{ home_path }}/{{ item }}"
+    state: link
+  become: false
+  with_items: "{{ dotfiles }}"

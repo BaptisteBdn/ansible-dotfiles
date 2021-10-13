@@ -1,0 +1,11 @@
+---
+dotfiles_repo: "https://github.com/BaptisteBdn/dotfiles"
+dotfiles_repo_local_destination: "~/.dotfiles"
+
+home_path: "~"
+dotfiles:
+  - .zshrc
+  - .zshrc.d
+  - .vimrc
+  - .config
+  - .cache

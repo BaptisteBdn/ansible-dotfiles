@@ -1,0 +1,75 @@
+---
+
+# Ansible community.general.pacman required
+# Use : ansible-galaxy collection install community.general
+- name: Install needed packages
+  community.general.pacman:
+    name: 
+      - alacritty
+      - fzf
+      - otf-font-awesome
+      - polybar
+      - python-pywal
+      - vim
+      - yay
+      - zsh
+    state: present
+  become: true
+
+# Ansible kewlfft.aur required
+# Use : ansible-galaxy collection install kewlfft.aur
+- name: Install AUR needed packages using yay
+  kewlfft.aur.aur:
+    use: yay
+    name:
+      - picom-ibhagwan-git
+  become: false
+
+- name: Check if .oh-my-zsh exists
+  stat:
+    path: ~/.oh-my-zsh
+  register: oh_my_zsh_result
+
+- name: Cloning oh-my-zsh
+  git:
+    repo=https://github.com/robbyrussell/oh-my-zsh
+    dest=~/.oh-my-zsh
+  when: not oh_my_zsh_result.stat.exists
+
+- name: Check if zsh-syntax-highlighting plugin exists
+  stat:
+    path: ~/.oh-my-zsh/plugins/zsh-syntax-highlighting
+  register: zsh_syntax_highlighting_result
+  
+- name: Cloning zsh-syntax-highlighting plugin into oh-my-zsh folder
+  git:
+    repo=https://github.com/zsh-users/zsh-syntax-highlighting.git
+    dest=~/.oh-my-zsh/plugins/zsh-syntax-highlighting
+  when: not zsh_syntax_highlighting_result.stat.exists
+
+- name: Check if cdimascio-lambda theme exists
+  stat:
+    path: ~/.oh-my-zsh/themes/cdimascio-lambda.zsh-theme
+  register: cdimascio_lambda_result
+
+- name: Cloning cdimascio-lambda theme repository into /tmp
+  git:
+    repo=https://github.com/cdimascio/lambda-zsh-theme.git
+    dest=/tmp/cdimascio-lambda/
+  when: not cdimascio_lambda_result.stat.exists
+
+- name: Move cdimascio-lambda theme to oh-my-zsh themes folder
+  command: mv -f /tmp/cdimascio-lambda/cdimascio-lambda.zsh-theme ~/.oh-my-zsh/themes/cdimascio-lambda.zsh-theme
+  when: not cdimascio_lambda_result.stat.exists
+
+- name: Removing cdimascio-lambda theme repository
+  ansible.builtin.file:
+    path: /tmp/cdimascio-lambda/
+    state: absent
+  when: not cdimascio_lambda_result.stat.exists
+
+- name: Change user shell to zsh 
+  user:
+    name: "{{ ansible_user_id }}"
+    shell: /bin/zsh
+  become: true
