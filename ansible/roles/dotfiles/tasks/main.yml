@@ -1,10 +1,11 @@
 ---
 
 - name: Clone repository locally
+  become: false
   git:
     repo: "{{ dotfiles_repo }}"
     dest: "{{ dotfiles_repo_local_destination }}"
-  become: false
+  
 
 - name: Check if all the dotfiles are links
   command: "ls -F {{ home_path }}/{{ item }}"
@@ -26,3 +27,24 @@
     state: link
   become: false
   with_items: "{{ dotfiles }}"
+
+- name: Configure shared font directories
+  become: yes
+  file:
+    path: '/usr/local/share/fonts/{{ item.type }}/{{ item.dest | dirname }}'
+    state: 'directory'
+    group: 'root'
+    owner: 'root'
+    mode: '0755'
+  with_items: '{{ fonts_shared }}'
+
+- name: Configure shared fonts
+  become: yes
+  copy:
+    src: '{{ item.src }}'
+    dest: '/usr/local/share/fonts/{{ item.type }}/{{ item.dest }}'
+    owner: 'root'
+    group: 'root'
+    mode: '0644'
+  notify: 'rebuild fonts cache'
+  with_items: '{{ fonts_shared }}'

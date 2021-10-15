@@ -1,0 +1,8 @@
+---
+fonts_shared:
+ - type: 'ttf'
+   src: 'DejaVuSansMonoBoldNerdFontComplete.ttf'
+   dest: 'DejaVuSansMono/DejaVuSansMonoBoldNerdFontComplete.ttf'
+ - type: 'ttf'
+   src: 'DejaVuSansMonoNerdFontComplete.ttf'
+   dest: 'DejaVuSansMono/DejaVuSansMonoNerdFontComplete.ttf'

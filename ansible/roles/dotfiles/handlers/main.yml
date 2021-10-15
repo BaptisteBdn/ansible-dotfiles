@@ -1,0 +1,5 @@
+---
+
+- name: 'rebuild fonts cache'
+  become: yes
+  shell: 'fc-cache -v -f'

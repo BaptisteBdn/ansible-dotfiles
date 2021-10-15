@@ -8,12 +8,21 @@
       - alacritty
       - fzf
       - otf-font-awesome
+      - playerctl
       - polybar
       - python-pywal
       - vim
       - yay
       - zsh
     state: present
+  become: true
+
+# Uninstall picom if installed
+- name: Remove picom if installed 
+  community.general.pacman:
+    name: 
+      - picom
+    state: absent
   become: true
 
 # Ansible kewlfft.aur required
