@@ -48,3 +48,24 @@
     mode: '0644'
   notify: 'rebuild fonts cache'
   with_items: '{{ fonts_shared }}'
+
+- name: Check if Reversal-icon-theme theme exists
+  stat:
+    path: "{{ home_path }}/.local/share/icons/Reversal"
+  register: Reversal_icon_theme_result
+
+- name: Cloning Reversal-icon-theme repository into /tmp
+  git:
+    repo=https://github.com/yeyushengfan258/Reversal-icon-theme.git
+    dest=/tmp/Reversal-icon-theme/
+  when: not Reversal_icon_theme_result.stat.exists
+
+- name: Installing Reversal-icon-theme
+  command: ./tmp/Reversal-icon-theme/install.sh
+  when: not Reversal_icon_theme_result.stat.exists
+
+- name: Removing Reversal-icon-theme repository
+  ansible.builtin.file:
+    path: /tmp/Reversal-icon-theme/
+    state: absent
+  when: not Reversal_icon_theme_result.stat.exists

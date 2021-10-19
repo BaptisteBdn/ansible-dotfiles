@@ -6,6 +6,7 @@
   community.general.pacman:
     name: 
       - alacritty
+      - flameshot
       - fzf
       - otf-font-awesome
       - playerctl
@@ -72,7 +73,7 @@
   when: not cdimascio_lambda_result.stat.exists
 
 - name: Removing cdimascio-lambda theme repository
-  ansible.builtin.file:
+  file:
     path: /tmp/cdimascio-lambda/
     state: absent
   when: not cdimascio_lambda_result.stat.exists
