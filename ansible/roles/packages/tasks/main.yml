@@ -6,6 +6,8 @@
   community.general.pacman:
     name: 
       - alacritty
+      - blueman
+      - bluez-utils
       - flameshot
       - fzf
       - otf-font-awesome

@@ -61,7 +61,7 @@
   when: not Reversal_icon_theme_result.stat.exists
 
 - name: Installing Reversal-icon-theme
-  command: ./tmp/Reversal-icon-theme/install.sh
+  command: sh /tmp/Reversal-icon-theme/install.sh
   when: not Reversal_icon_theme_result.stat.exists
 
 - name: Removing Reversal-icon-theme repository
