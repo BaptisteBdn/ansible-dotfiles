@@ -6,7 +6,6 @@
     repo: "{{ dotfiles_repo }}"
     dest: "{{ dotfiles_repo_local_destination }}"
   
-
 - name: Check if all the dotfiles are links
   command: "ls -F {{ home_path }}/{{ item }}"
   register: existing_dotfile_info

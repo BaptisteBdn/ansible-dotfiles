@@ -10,6 +10,7 @@
       - bluez-utils
       - flameshot
       - fzf
+      - geeqie
       - otf-font-awesome
       - playerctl
       - polybar
