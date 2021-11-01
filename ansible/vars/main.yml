@@ -9,3 +9,4 @@ dotfiles:
   - .vimrc
   - .config
   - .cache
+  - .themes
